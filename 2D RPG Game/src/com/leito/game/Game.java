@@ -2,7 +2,6 @@ package com.leito.game;
 
 import java.awt.BorderLayout;
 import java.awt.Canvas;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
@@ -10,6 +9,8 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
 import javax.swing.JFrame;
+
+import com.leito.game.gfx.SpriteSheet;
 
 public class Game extends Canvas implements Runnable{
 
@@ -23,11 +24,12 @@ public class Game extends Canvas implements Runnable{
 	private JFrame frame;
 	
 	public boolean running = false;
-	public int tickCount = 0;
+	public int updateCount = 0;
 	
 	private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-	
 	private int[] pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
+	
+	private SpriteSheet spriteSheet = new SpriteSheet("/spritesheet.png");
 	
 	public Game(){
 		setMinimumSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
@@ -73,7 +75,7 @@ public class Game extends Canvas implements Runnable{
 			
 			while(delta >= 1){
 				ticks++;
-				tick();
+				update();
 				delta -= 1;
 				shouldRender = true;
 			}
@@ -90,18 +92,18 @@ public class Game extends Canvas implements Runnable{
 			
 			if(System.currentTimeMillis() - lasTimer >= 1000){
 				lasTimer += 1000;
-				System.out.println(frames + " framse, " + ticks + " ticks");
+				System.out.println(frames + " FPS, " + ticks + " UPS");
 				frames = 0;
 				ticks = 0;
 			}
 		}
 	}
 	
-	public void tick(){
-		tickCount++;
+	public void update(){
+		updateCount++;
 		
 		for(int i = 0; i < pixels.length ; i++){
-			pixels[i] = i + tickCount;
+			pixels[i] = i + updateCount;
 		}
 	}
 	
