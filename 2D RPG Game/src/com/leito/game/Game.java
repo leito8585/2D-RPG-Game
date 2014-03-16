@@ -10,6 +10,7 @@ import java.awt.image.DataBufferInt;
 
 import javax.swing.JFrame;
 
+import com.leito.game.gfx.Screen;
 import com.leito.game.gfx.SpriteSheet;
 
 public class Game extends Canvas implements Runnable{
@@ -18,7 +19,7 @@ public class Game extends Canvas implements Runnable{
 	
 	public static final int WIDTH = 160;
 	public static final int HEIGHT = WIDTH / 12 * 9;
-	public static final int SCALE = 3;
+	public static final int SCALE = 4;
 	public static final String NAME = "GAME";
 	
 	private JFrame frame;
@@ -29,7 +30,7 @@ public class Game extends Canvas implements Runnable{
 	private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 	private int[] pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
 	
-	private SpriteSheet spriteSheet = new SpriteSheet("/spritesheet.png");
+	private Screen screen;
 	
 	public Game(){
 		setMinimumSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
@@ -45,6 +46,10 @@ public class Game extends Canvas implements Runnable{
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+	}
+	
+	public void init(){
+		screen = new Screen(WIDTH, HEIGHT, new SpriteSheet("/spritesheet.png"));
 	}
 	
 	private synchronized void start() {
@@ -66,6 +71,8 @@ public class Game extends Canvas implements Runnable{
 		
 		long lasTimer = System.currentTimeMillis();
 		double delta = 0;
+		
+		init();
 		
 		while(running){
 			long now = System.nanoTime();
@@ -101,10 +108,6 @@ public class Game extends Canvas implements Runnable{
 	
 	public void update(){
 		updateCount++;
-		
-		for(int i = 0; i < pixels.length ; i++){
-			pixels[i] = i + updateCount;
-		}
 	}
 	
 	public void render(){
@@ -114,9 +117,11 @@ public class Game extends Canvas implements Runnable{
 			return;
 		}
 		
-		Graphics g = bs.getDrawGraphics();		
-		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
+		screen.render(pixels, 0, WIDTH);
 		
+		Graphics g = bs.getDrawGraphics();
+		g.drawRect(0, 0, getWidth(), getHeight());
+		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
 		g.dispose();
 		bs.show();
 	}
