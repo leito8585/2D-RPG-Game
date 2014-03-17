@@ -17,9 +17,9 @@ public class Game extends Canvas implements Runnable{
 
 	private static final long serialVersionUID = 1L;
 	
-	public static final int WIDTH = 320;
+	public static final int WIDTH = 160;
 	public static final int HEIGHT = WIDTH / 12 * 9;
-	public static final int SCALE = 2;
+	public static final int SCALE = 3;
 	public static final String NAME = "GAME";
 	
 	private JFrame frame;
@@ -132,7 +132,17 @@ public class Game extends Canvas implements Runnable{
 			return;
 		}
 		
-		screen.render(pixels, 0, WIDTH);
+		for(int y = 0; y < 16; y++){
+			for(int x = 0; x < 16; x++){
+				screen.render(x<<4, y<<4, 5);
+			}
+		}
+		
+		for(int y = 0; y < screen.height; y++){
+			for(int x = 0; x < screen.width; x++){
+				pixels[x + y * WIDTH] = screen.pixels[x + y * screen.width];
+			}
+		}
 		
 		Graphics g = bs.getDrawGraphics();
 		g.drawRect(0, 0, getWidth(), getHeight());
