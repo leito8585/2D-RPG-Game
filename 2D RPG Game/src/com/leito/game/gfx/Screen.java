@@ -53,8 +53,9 @@ public class Screen {
 		}
 	}
 
+
 	// neue render
-	public void render(int xPos, int yPos, int tile) {
+	public void render(int xPos, int yPos, int tile, boolean mirrorX, boolean mirrorY) {
 		xPos -= xOffset;
 		yPos -= yOffset;
 
@@ -62,17 +63,24 @@ public class Screen {
 		int yTile = tile / 16;
 		int tileOffset = (xTile << 4) + (yTile << 4) * sheet.width;
 		for (int y = 0; y < 16; y++) {
+			int ySheet = y;
+			if(mirrorY) ySheet = 15 - y;
 			if (y + yPos < 0 || y + yPos >= height)
 				continue;
-			int ySheet = y;
 			for (int x = 0; x < 16; x++) {
+				int xSheet = x;
+				if(mirrorX) xSheet = 15 - x;
 				if (x + xPos < 0 || x + xPos >= width)
 					continue;
-				int xSheet = x;
 				pixels[(x + xPos) + (y + yPos) * width] = sheet.pixels[xSheet
 						+ ySheet * sheet.width + tileOffset];
 			}
 		}
 
+	}
+	
+	public void setOffset(int xOffset, int yOffset) {
+		this.xOffset = xOffset;
+		this.yOffset = yOffset;
 	}
 }

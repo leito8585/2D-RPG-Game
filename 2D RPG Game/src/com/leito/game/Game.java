@@ -134,7 +134,9 @@ public class Game extends Canvas implements Runnable{
 		
 		for(int y = 0; y < 16; y++){
 			for(int x = 0; x < 16; x++){
-				screen.render(x<<4, y<<4, 5);
+				boolean flipX = x % 2 == 0;
+				boolean flipY = y % 2 == 0;
+				screen.render(x<<4, y<<4, 1, flipX, flipY);
 			}
 		}
 		
