@@ -4,6 +4,9 @@ public class Screen {
 
 	public static final int MAP_WIDTH = 128;
 	public static final int MAP_WIDTH_MASK = MAP_WIDTH - 1;
+	
+	public static final byte BIT_MIRROR_X = 0x01;
+	public static final byte BIT_MIRROR_Y = 0x02;
 
 	public int[] pixels;
 
@@ -56,9 +59,12 @@ public class Screen {
 
 
 	// neue render
-	public void render(int xPos, int yPos, int tile, boolean mirrorX, boolean mirrorY) {
+	public void render(int xPos, int yPos, int tile, int mirrorDir) {
 		xPos -= xOffset;
 		yPos -= yOffset;
+		
+		boolean mirrorX = (mirrorDir & BIT_MIRROR_X) > 0;
+		boolean mirrorY = (mirrorDir & BIT_MIRROR_Y) > 0;
 
 		int xTile = tile % 16;
 		int yTile = tile / 16;
@@ -73,15 +79,16 @@ public class Screen {
 				if(mirrorX) xSheet = 15 - x;
 				if (x + xPos < 0 || x + xPos >= width)
 					continue;
-				pixels[(x + xPos) + (y + yPos) * width] = sheet.pixels[xSheet
-						+ ySheet * sheet.width + tileOffset];
+				
+				int col = sheet.pixels[xSheet + ySheet * sheet.width + tileOffset];
+				if (col != 0xffff15ff) pixels[(x + xPos) + (y + yPos) * width] = col;
 			}
 		}
 
 	}
 	
 	public void render(int x, int y, int tile) {
-		render(x, y, tile, false, false);
+		render(x, y, tile, 0x00);
 	}
 	
 	public void setOffset(int xOffset, int yOffset) {
