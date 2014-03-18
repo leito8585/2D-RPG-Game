@@ -24,6 +24,7 @@ public class Screen {
 	}
 
 	// alte render
+	@Deprecated
 	public void render(int[] pixels, int offset, int row) {
 		for (int yTile = yOffset >> 3; yTile <= (yOffset + height) >> 3; yTile++) {
 			int yMin = yTile * 8 - yOffset;
@@ -79,8 +80,13 @@ public class Screen {
 
 	}
 	
+	public void render(int x, int y, int tile) {
+		render(x, y, tile, false, false);
+	}
+	
 	public void setOffset(int xOffset, int yOffset) {
 		this.xOffset = xOffset;
 		this.yOffset = yOffset;
 	}
+
 }

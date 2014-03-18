@@ -10,16 +10,18 @@ import java.awt.image.DataBufferInt;
 
 import javax.swing.JFrame;
 
+import com.leito.game.gfx.Font;
 import com.leito.game.gfx.Screen;
 import com.leito.game.gfx.SpriteSheet;
+import com.leito.game.level.Level;
 
 public class Game extends Canvas implements Runnable{
 
 	private static final long serialVersionUID = 1L;
 	
-	public static final int WIDTH = 160;
+	public static final int WIDTH = 320;
 	public static final int HEIGHT = WIDTH / 12 * 9;
-	public static final int SCALE = 3;
+	public static final int SCALE = 2;
 	public static final String NAME = "GAME";
 	
 	private JFrame frame;
@@ -32,6 +34,7 @@ public class Game extends Canvas implements Runnable{
 	
 	private Screen screen;
 	public InputHandler input;
+	public Level level;
 	
 	public Game(){
 		setMinimumSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
@@ -52,6 +55,7 @@ public class Game extends Canvas implements Runnable{
 	public void init(){
 		screen = new Screen(WIDTH, HEIGHT, new SpriteSheet("/spritesheet.png"));
 		input = new InputHandler(this);
+		level = new Level(64, 64);
 	}
 	
 	private synchronized void start() {
@@ -108,21 +112,25 @@ public class Game extends Canvas implements Runnable{
 		}
 	}
 	
+	private int x = 0, y = 0;
+	
 	public void update(){
 		updateCount++;
 		
 		if(input.up.isPressed()){
-			screen.yOffset--;
+			y--;
 		}
 		if(input.down.isPressed()){
-			screen.yOffset++;
+			y++;
 		}
 		if(input.left.isPressed()){
-			screen.xOffset--;
+			x--;
 		}
 		if(input.right.isPressed()){
-			screen.xOffset++;
+			x++;
 		}
+		
+		level.update();
 	}
 	
 	public void render(){
@@ -131,14 +139,11 @@ public class Game extends Canvas implements Runnable{
 			createBufferStrategy(3);
 			return;
 		}
+			
+		int xOffset = x - (screen.width / 2);
+		int yOffset = y - (screen.height / 2);
 		
-		for(int y = 0; y < 16; y++){
-			for(int x = 0; x < 16; x++){
-				boolean flipX = x % 2 == 0;
-				boolean flipY = y % 2 == 0;
-				screen.render(x<<4, y<<4, 1, flipX, flipY);
-			}
-		}
+		level.renderTiles(screen, xOffset, yOffset);
 		
 		for(int y = 0; y < screen.height; y++){
 			for(int x = 0; x < screen.width; x++){
