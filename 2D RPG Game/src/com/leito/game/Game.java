@@ -114,6 +114,7 @@ public class Game extends Canvas implements Runnable{
 				ticks = 0;
 			}
 		}
+		stop();
 	}
 	
 	public void update(){
