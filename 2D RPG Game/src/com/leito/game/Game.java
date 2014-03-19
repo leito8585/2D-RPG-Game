@@ -133,7 +133,7 @@ public class Game extends Canvas implements Runnable{
 		
 		level.renderTiles(screen, xOffset, yOffset);
 		level.renderEntities(screen);
-		
+				
 		for(int y = 0; y < screen.height; y++){
 			for(int x = 0; x < screen.width; x++){
 				pixels[x + y * WIDTH] = screen.pixels[x + y * screen.width];

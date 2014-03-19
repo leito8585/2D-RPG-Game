@@ -48,11 +48,11 @@ public class Player extends Mob {
 		int xOffset = x - modifier/2;
 		int yOffset = y - modifier/2 - 8;
 		
-		screen.render(xOffset, yOffset, xTile + yTile * 16);
-		screen.render(xOffset + modifier, yOffset, (xTile + 1) + yTile * 16);
+		screen.render16Pixel(xOffset, yOffset, xTile + yTile * 16, 0x00, scale);
+		screen.render16Pixel(xOffset + modifier, yOffset, (xTile + 1) + yTile * 16, 0x00, scale);
 		
-		screen.render(xOffset, yOffset + modifier, xTile + (yTile + 1) * 16);
-		screen.render(xOffset + modifier, yOffset + modifier, (xTile + 1) + (yTile + 1) * 16);
+		screen.render16Pixel(xOffset, yOffset + modifier, xTile + (yTile + 1) * 16, 0x00, scale);
+		screen.render16Pixel(xOffset + modifier, yOffset + modifier, (xTile + 1) + (yTile + 1) * 16, 0x00, scale);
 		
 	}
 
