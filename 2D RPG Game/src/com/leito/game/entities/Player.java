@@ -50,7 +50,7 @@ public class Player extends Mob {
 
 	@Override
 	public void render(Screen screen) {
-		int xTile = 4;
+		int xTile = 2;
 		int yTile = 7;
 		int mirrorDir = 0x00;
 				
@@ -68,19 +68,6 @@ public class Player extends Mob {
 			}
 		}
 		if (movingDir == 1) {
-			xTile = 4;
-			yTile = 7;
-			if (isMoving) {
-				if (anim % 20 > 10) {
-					xTile = 4;
-					yTile = 9;
-				} else {
-					xTile = 4;
-					yTile = 11;
-				}
-			}
-		}
-		if (movingDir == 2) {
 			xTile = 2;
 			yTile = 7;
 			if (isMoving) {
@@ -89,20 +76,33 @@ public class Player extends Mob {
 					yTile = 9;
 				} else {
 					xTile = 2;
+					yTile = 11;
+				}
+			}
+		}
+		if (movingDir == 2) {
+			xTile = 1;
+			yTile = 7;
+			if (isMoving) {
+				if (anim % 20 > 10) {
+					xTile = 1;
+					yTile = 9;
+				} else {
+					xTile = 1;
 					yTile = 11;
 				}
 			}
 			mirrorDir = 0x01;
 		}
 		if (movingDir == 3) {
-			xTile = 2;
+			xTile = 1;
 			yTile = 7;
 			if (isMoving) {
 				if (anim % 20 > 10) {
-					xTile = 2;
+					xTile = 1;
 					yTile = 9;
 				} else {
-					xTile = 2;
+					xTile = 1;
 					yTile = 11;
 				}
 			}
@@ -112,16 +112,42 @@ public class Player extends Mob {
 		int xOffset = x - modifier/2;
 		int yOffset = y - modifier/2 - 8;
 		
-		screen.render16Pixel(xOffset + (modifier * mirrorDir), yOffset, xTile + yTile * 16, mirrorDir, scale);
-		screen.render16Pixel(xOffset + modifier - (modifier * mirrorDir), yOffset, (xTile + 1) + yTile * 16, mirrorDir, scale);
+		screen.render16Pixel(xOffset + 4, yOffset, xTile + yTile * 16, mirrorDir, scale);
+		//screen.render16Pixel(xOffset + (modifier * mirrorDir), yOffset, xTile + yTile * 16, mirrorDir, scale);
+		//screen.render16Pixel(xOffset + modifier - (modifier * mirrorDir), yOffset, (xTile + 1) + yTile * 16, mirrorDir, scale);
 		
-		screen.render16Pixel(xOffset+ (modifier * mirrorDir), yOffset + modifier, xTile + (yTile + 1) * 16, mirrorDir, scale);
-		screen.render16Pixel(xOffset + modifier - (modifier * mirrorDir), yOffset + modifier, (xTile + 1) + (yTile + 1) * 16, mirrorDir, scale);
+		screen.render16Pixel(xOffset + 4, yOffset + modifier, xTile + (yTile + 1) * 16, mirrorDir, scale);
+		//screen.render16Pixel(xOffset+ (modifier * mirrorDir), yOffset + modifier, xTile + (yTile + 1) * 16, mirrorDir, scale);
+		//screen.render16Pixel(xOffset + modifier - (modifier * mirrorDir), yOffset + modifier, (xTile + 1) + (yTile + 1) * 16, mirrorDir, scale);
 		
 	}
 
 	@Override
 	public boolean hasCollided(int xa, int ya) {
+		int xMin = 0;
+		int xMax = 8;
+		int yMin = 3;
+		int yMax = 8;
+		for(int x = xMin; x < xMax; x++){
+			if(isSolidTile(xa, ya, x, yMin)){
+				return true;
+			}
+		}
+		for(int x = xMin; x < xMax; x++){
+			if(isSolidTile(xa, ya, x, yMax)){
+				return true;
+			}
+		}
+		for(int y = yMin; y < yMax; y++){
+			if(isSolidTile(xa, ya, xMin, y)){
+				return true;
+			}
+		}
+		for(int y = yMin; y < yMax; y++){
+			if(isSolidTile(xa, ya, xMax, y)){
+				return true;
+			}
+		}
 		return false;
 	}
 }

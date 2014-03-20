@@ -109,7 +109,7 @@ public class Game extends Canvas implements Runnable{
 			
 			if(System.currentTimeMillis() - lasTimer >= 1000){
 				lasTimer += 1000;
-				System.out.println(frames + " FPS, " + ticks + " UPS");
+				System.out.println(frames + " FPS, " + ticks + " UPS || Player X/Y: " + player.x + "/" + player.y);
 				frames = 0;
 				ticks = 0;
 			}

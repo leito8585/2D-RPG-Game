@@ -6,18 +6,18 @@ import com.leito.game.level.Level;
 public abstract class Tile {
 
 	public static final Tile[] tiles = new Tile[256];
-	public static final Tile VOID = new BasicTile(0, 0, 0);
-	public static final Tile STONE = new BasicTile(1, 1, 0);
+	public static final Tile VOID = new BasicSolidTile(0, 0, 0);
+	public static final Tile STONE = new BasicSolidTile(1, 1, 0);
 	public static final Tile GRASS = new BasicTile(2, 2, 0);
 
 	protected byte id;
 	protected boolean solid;
 	protected boolean emitter;
 	
-	public Tile(int id, boolean isSolid, boolean isEmitter){
+	public Tile(int id, boolean solid, boolean isEmitter){
 		this.id = (byte) id;
 		if(tiles[id] != null) throw new RuntimeException("Duplizieren Kachel-ID auf " + id);
-		this.solid = isSolid;
+		this.solid = solid;
 		this.emitter = isEmitter;
 		this.tiles[id] = this;
 	}
