@@ -119,7 +119,6 @@ public class Level {
 	public void renderEntities(Screen screen) {
 		for (Entity entity : entities) {
 			entity.render(screen);
-			;
 		}
 	}
 
