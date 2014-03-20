@@ -57,7 +57,7 @@ public class Game extends Canvas implements Runnable{
 	public void init(){
 		screen = new Screen(WIDTH, HEIGHT, new SpriteSheet("/spritesheet.png"));
 		input = new InputHandler(this);
-		level = new Level("/levels/test_level.png");
+		level = new Level("/levels/spawn.png");
 		player = new Player(level, 0, 0, input);
 		level.addEntity(player);
 	}

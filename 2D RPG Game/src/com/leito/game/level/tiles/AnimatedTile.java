@@ -1,0 +1,30 @@
+package com.leito.game.level.tiles;
+
+import com.leito.game.gfx.Screen;
+import com.leito.game.level.Level;
+
+public class AnimatedTile extends BasicTile{
+	
+	private int[][] animationTileCoords;
+	private int currentAnimationIndex;
+	private long lastIterationTime;
+	private int animationSwitchDelay;
+
+	public AnimatedTile(int id, int[][] animationCoords, int levelColour, int animationSwitchDelay) {
+		super(id, animationCoords[0][0], animationCoords[0][1], levelColour);
+		this.animationTileCoords = animationCoords;
+		this.currentAnimationIndex = 0;
+		this.lastIterationTime = System.currentTimeMillis();
+		this.animationSwitchDelay = animationSwitchDelay;
+	}
+
+	@Override
+	public void update() {
+		if((System.currentTimeMillis() - lastIterationTime) >= (animationSwitchDelay)){
+			lastIterationTime = System.currentTimeMillis();
+			currentAnimationIndex = (currentAnimationIndex + 1) % animationTileCoords.length;
+			this.tileId = (animationTileCoords[currentAnimationIndex][0] + (animationTileCoords[currentAnimationIndex][1] * 16));
+		}
+	}
+
+}

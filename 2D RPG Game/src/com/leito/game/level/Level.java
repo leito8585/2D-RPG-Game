@@ -88,6 +88,13 @@ public class Level {
 		for (Entity entity : entities) {
 			entity.update();
 		}
+		
+		for(Tile tile : Tile.tiles){
+			if(tile == null){
+				break;
+			}
+			tile.update();
+		}
 	}
 
 	public void renderTiles(Screen screen, int xOffset, int yOffset) {

@@ -18,5 +18,9 @@ public class BasicTile extends Tile{
 		screen.render16Pixel(x, y, tileId, 0x00, 1);
 	}
 
+	@Override
+	public void update() {
+	}
+
 	
 }
