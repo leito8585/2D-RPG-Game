@@ -4,12 +4,13 @@ import com.leito.game.InputHandler;
 import com.leito.game.gfx.Screen;
 import com.leito.game.level.Level;
 
-
 public class Player extends Mob {
 
 	private InputHandler input;
 	private int anim = 0;
-	
+	protected boolean isSwimming = false;
+	private int updateCount = 0;
+
 	public Player(Level level, int x, int y, InputHandler input) {
 		super(level, "Leito", x, y, 1);
 		this.input = input;
@@ -39,13 +40,20 @@ public class Player extends Mob {
 		} else {
 			isMoving = false;
 		}
-		
+
 		if (anim < 7500) {
 			anim++;
-		}
-		else{
+		} else {
 			anim = 0;
 		}
+
+		if (level.getTile(this.x >> 4, this.y >> 4).getId() == 9) {
+			isSwimming = true;
+		}
+		if (isSwimming && level.getTile(this.x >> 4, this.y >> 4).getId() != 9) {
+			isSwimming = false;
+		}
+		updateCount++;
 	}
 
 	@Override
@@ -53,7 +61,7 @@ public class Player extends Mob {
 		int xTile = 2;
 		int yTile = 7;
 		int mirrorDir = 0x00;
-				
+
 		if (movingDir == 0) {
 			xTile = 0;
 			yTile = 7;
@@ -107,19 +115,47 @@ public class Player extends Mob {
 				}
 			}
 		}
-		
+
 		int modifier = 16 * scale;
-		int xOffset = x - modifier/2;
-		int yOffset = y - modifier/2 - 8;
+		int xOffset = x - modifier / 2;
+		int yOffset = y - modifier / 2 - 8;
 		
-		screen.render16Pixel(xOffset + 4, yOffset, xTile + yTile * 16, mirrorDir, scale);
-		//screen.render16Pixel(xOffset + (modifier * mirrorDir), yOffset, xTile + yTile * 16, mirrorDir, scale);
-		//screen.render16Pixel(xOffset + modifier - (modifier * mirrorDir), yOffset, (xTile + 1) + yTile * 16, mirrorDir, scale);
-		
-		screen.render16Pixel(xOffset + 4, yOffset + modifier, xTile + (yTile + 1) * 16, mirrorDir, scale);
-		//screen.render16Pixel(xOffset+ (modifier * mirrorDir), yOffset + modifier, xTile + (yTile + 1) * 16, mirrorDir, scale);
-		//screen.render16Pixel(xOffset + modifier - (modifier * mirrorDir), yOffset + modifier, (xTile + 1) + (yTile + 1) * 16, mirrorDir, scale);
-		
+		if(isSwimming){
+			yOffset += 8;
+			if(updateCount % 60 < 15){
+				screen.render16Pixel(xOffset, yOffset + 3, 3 + 7 * 16, 0x00, 1);
+				screen.render16Pixel(xOffset + 8 , yOffset + 3, 3 + 7 * 16, 0x01, 1);
+			}else if (15 <= updateCount % 60 && updateCount % 60 < 30){
+				yOffset -= 1;
+				screen.render16Pixel(xOffset, yOffset + 3, 4 + 7 * 16, 0x00, 1);
+				screen.render16Pixel(xOffset + 8, yOffset + 3, 4 + 7 * 16, 0x01, 1);
+			}else if (30 <= updateCount % 60 && updateCount % 60 < 45){
+				screen.render16Pixel(xOffset, yOffset + 3, 5 + 7 * 16, 0x00, 1);
+				screen.render16Pixel(xOffset + 8, yOffset + 3, 5 + 7 * 16, 0x01, 1);
+			}else{
+				yOffset -= 1;
+				screen.render16Pixel(xOffset, yOffset + 3, 4 + 7 * 16, 0x00, 1);
+				screen.render16Pixel(xOffset + 8, yOffset + 3, 4 + 7 * 16, 0x01, 1);
+			}
+			
+		}
+
+		screen.render16Pixel(xOffset + 4, yOffset, xTile + yTile * 16,
+				mirrorDir, scale);
+		// screen.render16Pixel(xOffset + (modifier * mirrorDir), yOffset, xTile
+		// + yTile * 16, mirrorDir, scale);
+		// screen.render16Pixel(xOffset + modifier - (modifier * mirrorDir),
+		// yOffset, (xTile + 1) + yTile * 16, mirrorDir, scale);
+
+		if (!isSwimming) {
+			screen.render16Pixel(xOffset + 4, yOffset + modifier, xTile
+					+ (yTile + 1) * 16, mirrorDir, scale);
+			// screen.render16Pixel(xOffset+ (modifier * mirrorDir), yOffset +
+			// modifier, xTile + (yTile + 1) * 16, mirrorDir, scale);
+			// screen.render16Pixel(xOffset + modifier - (modifier * mirrorDir),
+			// yOffset + modifier, (xTile + 1) + (yTile + 1) * 16, mirrorDir,
+			// scale);
+		}
 	}
 
 	@Override
@@ -128,23 +164,23 @@ public class Player extends Mob {
 		int xMax = 8;
 		int yMin = 3;
 		int yMax = 8;
-		for(int x = xMin; x < xMax; x++){
-			if(isSolidTile(xa, ya, x, yMin)){
+		for (int x = xMin; x < xMax; x++) {
+			if (isSolidTile(xa, ya, x, yMin)) {
 				return true;
 			}
 		}
-		for(int x = xMin; x < xMax; x++){
-			if(isSolidTile(xa, ya, x, yMax)){
+		for (int x = xMin; x < xMax; x++) {
+			if (isSolidTile(xa, ya, x, yMax)) {
 				return true;
 			}
 		}
-		for(int y = yMin; y < yMax; y++){
-			if(isSolidTile(xa, ya, xMin, y)){
+		for (int y = yMin; y < yMax; y++) {
+			if (isSolidTile(xa, ya, xMin, y)) {
 				return true;
 			}
 		}
-		for(int y = yMin; y < yMax; y++){
-			if(isSolidTile(xa, ya, xMax, y)){
+		for (int y = yMin; y < yMax; y++) {
+			if (isSolidTile(xa, ya, xMax, y)) {
 				return true;
 			}
 		}

@@ -20,8 +20,8 @@ public class Game extends Canvas implements Runnable{
 
 	private static final long serialVersionUID = 1L;
 	
-	public static final int WIDTH = 320;
-	public static final int HEIGHT = WIDTH / 12 * 9;
+	public static final int WIDTH = 640;
+	public static final int HEIGHT = WIDTH / 16 * 9;
 	public static final int SCALE = 2;
 	public static final String NAME = "GAME";
 	
@@ -134,7 +134,8 @@ public class Game extends Canvas implements Runnable{
 		
 		level.renderTiles(screen, xOffset, yOffset);
 		level.renderEntities(screen);
-				
+		String s = "kuba";
+		Font.render(s, screen, player.x + 7, player.y - 25, 1);	
 		for(int y = 0; y < screen.height; y++){
 			for(int x = 0; x < screen.width; x++){
 				pixels[x + y * WIDTH] = screen.pixels[x + y * screen.width];
