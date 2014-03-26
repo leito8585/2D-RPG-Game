@@ -20,23 +20,23 @@ public class Game extends Canvas implements Runnable{
 
 	private static final long serialVersionUID = 1L;
 	
-	public static final int WIDTH = 640;
+	public static final int WIDTH = 480;
 	public static final int HEIGHT = WIDTH / 16 * 9;
 	public static final int SCALE = 2;
 	public static final String NAME = "GAME";
 	
 	private JFrame frame;
 	
-	public boolean running = false;
-	public int updateCount = 0;
+	private boolean running = false;
+	private int updateCount = 0;
 	
 	private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 	private int[] pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
 	
 	private Screen screen;
-	public InputHandler input;
-	public Level level;
-	public Player player;
+	private InputHandler input;
+	private Level level;
+	private Player player;
 	
 	public Game(){
 		setMinimumSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
@@ -55,10 +55,10 @@ public class Game extends Canvas implements Runnable{
 	}
 	
 	public void init(){
-		screen = new Screen(WIDTH, HEIGHT, new SpriteSheet("/spritesheet.png"));
+		screen = new Screen(WIDTH, HEIGHT);
 		input = new InputHandler(this);
 		level = new Level("/levels/spawn.png");
-		player = new Player(level, 0, 0, input);
+		player = new Player(SpriteSheet.PLAYER, level, 0, 0, input, "Cycek");
 		level.addEntity(player);
 	}
 	
@@ -134,8 +134,7 @@ public class Game extends Canvas implements Runnable{
 		
 		level.renderTiles(screen, xOffset, yOffset);
 		level.renderEntities(screen);
-		String s = "kuba";
-		Font.render(s, screen, player.x + 7, player.y - 25, 1);	
+				
 		for(int y = 0; y < screen.height; y++){
 			for(int x = 0; x < screen.width; x++){
 				pixels[x + y * WIDTH] = screen.pixels[x + y * screen.width];
@@ -143,7 +142,6 @@ public class Game extends Canvas implements Runnable{
 		}
 		
 		Graphics g = bs.getDrawGraphics();
-		g.drawRect(0, 0, getWidth(), getHeight());
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
 		g.dispose();
 		bs.show();

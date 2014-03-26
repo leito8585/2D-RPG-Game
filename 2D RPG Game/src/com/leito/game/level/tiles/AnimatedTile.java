@@ -1,7 +1,6 @@
 package com.leito.game.level.tiles;
 
-import com.leito.game.gfx.Screen;
-import com.leito.game.level.Level;
+import com.leito.game.gfx.SpriteSheet;
 
 public class AnimatedTile extends BasicTile{
 	
@@ -10,8 +9,8 @@ public class AnimatedTile extends BasicTile{
 	private long lastIterationTime;
 	private int animationSwitchDelay;
 
-	public AnimatedTile(int id, int[][] animationCoords, int levelColour, int animationSwitchDelay) {
-		super(id, animationCoords[0][0], animationCoords[0][1], levelColour);
+	public AnimatedTile(SpriteSheet sheet, int id, int[][] animationCoords, int levelColour, int animationSwitchDelay) {
+		super(sheet, id, animationCoords[0][0], animationCoords[0][1], levelColour);
 		this.animationTileCoords = animationCoords;
 		this.currentAnimationIndex = 0;
 		this.lastIterationTime = System.currentTimeMillis();

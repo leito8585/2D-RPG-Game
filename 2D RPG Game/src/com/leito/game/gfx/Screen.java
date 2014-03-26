@@ -16,19 +16,16 @@ public class Screen {
 	public int width;
 	public int height;
 
-	public SpriteSheet sheet;
-
-	public Screen(int width, int height, SpriteSheet sheet) {
+	public Screen(int width, int height) {
 		this.width = width;
 		this.height = height;
-		this.sheet = sheet;
 
 		pixels = new int[width * height];
 	}
 
 	// alte render
 	@Deprecated
-	public void render(int[] pixels, int offset, int row) {
+	public void render(SpriteSheet sheet, int[] pixels, int offset, int row) {
 		for (int yTile = yOffset >> 3; yTile <= (yOffset + height) >> 3; yTile++) {
 			int yMin = yTile * 8 - yOffset;
 			int yMax = yMin + 8;
@@ -59,7 +56,7 @@ public class Screen {
 
 
 	// neue render
-	public void render16Pixel(int xPos, int yPos, int tile, int mirrorDir, int scale) {
+	public void render16Pixel(SpriteSheet sheet, int xPos, int yPos, int tile, int mirrorDir, int scale) {
 		xPos -= xOffset;
 		yPos -= yOffset;
 		
@@ -99,7 +96,7 @@ public class Screen {
 
 	}
 	
-	public void render8Pixel(int xPos, int yPos, int tile, int mirrorDir, int scale) {
+	public void render8Pixel(SpriteSheet sheet, int xPos, int yPos, int tile, int mirrorDir, int scale) {
 		xPos -= xOffset;
 		yPos -= yOffset;
 		
@@ -137,10 +134,6 @@ public class Screen {
 			}
 		}
 
-	}
-	
-	public void render(int x, int y, int tile) {
-		render16Pixel(x, y, tile, 0x00, 1);
 	}
 	
 	public void setOffset(int xOffset, int yOffset) {

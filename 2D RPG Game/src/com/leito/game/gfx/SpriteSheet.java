@@ -7,6 +7,10 @@ import javax.imageio.ImageIO;
 
 public class SpriteSheet {
 	
+	public static final SpriteSheet STANDART = new SpriteSheet("/spritesheet.png");
+	public static final SpriteSheet PLAYER = new SpriteSheet("/player.png");
+	public static final SpriteSheet FONT = new SpriteSheet("/font.png");
+	
 	public String path;
 	public int width;
 	public int height;

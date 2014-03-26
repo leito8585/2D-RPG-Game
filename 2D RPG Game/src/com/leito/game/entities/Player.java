@@ -1,18 +1,21 @@
 package com.leito.game.entities;
 
 import com.leito.game.InputHandler;
+import com.leito.game.gfx.Font;
 import com.leito.game.gfx.Screen;
+import com.leito.game.gfx.SpriteSheet;
 import com.leito.game.level.Level;
 
 public class Player extends Mob {
 
 	private InputHandler input;
-	private int anim = 0;
+	
+
 	protected boolean isSwimming = false;
 	private int updateCount = 0;
 
-	public Player(Level level, int x, int y, InputHandler input) {
-		super(level, "Leito", x, y, 1);
+	public Player(SpriteSheet sheet, Level level, int x, int y, InputHandler input, String name) {
+		super(sheet, level, name, x, y, 1);
 		this.input = input;
 	}
 
@@ -41,12 +44,6 @@ public class Player extends Mob {
 			isMoving = false;
 		}
 
-		if (anim < 7500) {
-			anim++;
-		} else {
-			anim = 0;
-		}
-
 		if (level.getTile(this.x >> 4, this.y >> 4).getId() == 9) {
 			isSwimming = true;
 		}
@@ -64,58 +61,58 @@ public class Player extends Mob {
 
 		if (movingDir == 0) {
 			xTile = 0;
-			yTile = 7;
+			yTile = 0;
 			if (isMoving) {
-				if (anim % 20 > 10) {
+				if (updateCount % 20 > 10) {
 					xTile = 0;
-					yTile = 9;
+					yTile = 2;
 				} else {
 					xTile = 0;
-					yTile = 11;
+					yTile = 4;
 				}
 			}
 		}
 		if (movingDir == 1) {
 			xTile = 2;
-			yTile = 7;
+			yTile = 0;
 			if (isMoving) {
-				if (anim % 20 > 10) {
+				if (updateCount % 20 > 10) {
 					xTile = 2;
-					yTile = 9;
+					yTile = 2;
 				} else {
 					xTile = 2;
-					yTile = 11;
+					yTile = 4;
 				}
 			}
 		}
 		if (movingDir == 2) {
 			xTile = 1;
-			yTile = 7;
+			yTile = 0;
 			if (isMoving) {
-				if (anim % 20 > 10) {
+				if (updateCount % 20 > 10) {
 					xTile = 1;
-					yTile = 9;
+					yTile = 2;
 				} else {
 					xTile = 1;
-					yTile = 11;
+					yTile = 4;
 				}
 			}
 			mirrorDir = 0x01;
 		}
 		if (movingDir == 3) {
 			xTile = 1;
-			yTile = 7;
+			yTile = 0;
 			if (isMoving) {
-				if (anim % 20 > 10) {
+				if (updateCount % 20 > 10) {
 					xTile = 1;
-					yTile = 9;
+					yTile = 2;
 				} else {
 					xTile = 1;
-					yTile = 11;
+					yTile = 4;
 				}
 			}
 		}
-
+		
 		int modifier = 16 * scale;
 		int xOffset = x - modifier / 2;
 		int yOffset = y - modifier / 2 - 8;
@@ -123,24 +120,25 @@ public class Player extends Mob {
 		if(isSwimming){
 			yOffset += 8;
 			if(updateCount % 60 < 15){
-				screen.render16Pixel(xOffset, yOffset + 3, 3 + 7 * 16, 0x00, 1);
-				screen.render16Pixel(xOffset + 8 , yOffset + 3, 3 + 7 * 16, 0x01, 1);
+				screen.render16Pixel(sheet, xOffset, yOffset + 3, 3 + 0 * 16, 0x00, 1);
+				screen.render16Pixel(sheet, xOffset + 8 , yOffset + 3, 3 + 0 * 16, 0x01, 1);
 			}else if (15 <= updateCount % 60 && updateCount % 60 < 30){
 				yOffset -= 1;
-				screen.render16Pixel(xOffset, yOffset + 3, 4 + 7 * 16, 0x00, 1);
-				screen.render16Pixel(xOffset + 8, yOffset + 3, 4 + 7 * 16, 0x01, 1);
+				screen.render16Pixel(sheet, xOffset, yOffset + 3, 4 + 0 * 16, 0x00, 1);
+				screen.render16Pixel(sheet, xOffset + 8, yOffset + 3, 4 + 0 * 16, 0x01, 1);
 			}else if (30 <= updateCount % 60 && updateCount % 60 < 45){
-				screen.render16Pixel(xOffset, yOffset + 3, 5 + 7 * 16, 0x00, 1);
-				screen.render16Pixel(xOffset + 8, yOffset + 3, 5 + 7 * 16, 0x01, 1);
+				screen.render16Pixel(sheet, xOffset, yOffset + 3, 5 + 0 * 16, 0x00, 1);
+				screen.render16Pixel(sheet, xOffset + 8, yOffset + 3, 5 + 0 * 16, 0x01, 1);
 			}else{
 				yOffset -= 1;
-				screen.render16Pixel(xOffset, yOffset + 3, 4 + 7 * 16, 0x00, 1);
-				screen.render16Pixel(xOffset + 8, yOffset + 3, 4 + 7 * 16, 0x01, 1);
+				screen.render16Pixel(sheet, xOffset, yOffset + 3, 4 + 0 * 16, 0x00, 1);
+				screen.render16Pixel(sheet, xOffset + 8, yOffset + 3, 4 + 0 * 16, 0x01, 1);
 			}
+			Font.render(getName(), screen, x + 7, y - 18, 1);	
 			
 		}
 
-		screen.render16Pixel(xOffset + 4, yOffset, xTile + yTile * 16,
+		screen.render16Pixel(sheet, xOffset + 4, yOffset, xTile + yTile * 16,
 				mirrorDir, scale);
 		// screen.render16Pixel(xOffset + (modifier * mirrorDir), yOffset, xTile
 		// + yTile * 16, mirrorDir, scale);
@@ -148,13 +146,14 @@ public class Player extends Mob {
 		// yOffset, (xTile + 1) + yTile * 16, mirrorDir, scale);
 
 		if (!isSwimming) {
-			screen.render16Pixel(xOffset + 4, yOffset + modifier, xTile
+			screen.render16Pixel(sheet, xOffset + 4, yOffset + modifier, xTile
 					+ (yTile + 1) * 16, mirrorDir, scale);
 			// screen.render16Pixel(xOffset+ (modifier * mirrorDir), yOffset +
 			// modifier, xTile + (yTile + 1) * 16, mirrorDir, scale);
 			// screen.render16Pixel(xOffset + modifier - (modifier * mirrorDir),
 			// yOffset + modifier, (xTile + 1) + (yTile + 1) * 16, mirrorDir,
 			// scale);
+			Font.render(getName(), screen, x + 7, y - 25, 1);	
 		}
 	}
 
@@ -185,5 +184,9 @@ public class Player extends Mob {
 			}
 		}
 		return false;
+	}
+	
+	public boolean isSwimming() {
+		return isSwimming;
 	}
 }

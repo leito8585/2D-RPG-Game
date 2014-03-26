@@ -1,5 +1,6 @@
 package com.leito.game.entities;
 
+import com.leito.game.gfx.SpriteSheet;
 import com.leito.game.level.Level;
 import com.leito.game.level.tiles.Tile;
 
@@ -12,8 +13,8 @@ public abstract class Mob extends Entity{
 	protected int movingDir = 1;
 	protected int scale = 1;
 
-	public Mob(Level level, String name, int x, int y, int speed) {
-		super(level);
+	public Mob(SpriteSheet sheet, Level level, String name, int x, int y, int speed) {
+		super(sheet, level);
 		this.name = name;
 		this.x = x;
 		this.y = y;
